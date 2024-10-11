@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
-    "id": "KarthikaRS99",
-    "publisher": "KARTHIKA S",
+    "id": "dropdown_extension",
+    "publisher": "KarthikaRS99",
     "version": "1.0.0",
     "name": "Ordered Dropdown Extension",
     "description": "Custom dropdown control for Azure DevOps that allows ordering items according to business needs",
