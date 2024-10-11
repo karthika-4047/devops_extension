@@ -1,0 +1,65 @@
+{
+    "manifestVersion": 1,
+    "id": "KarthikaRS99",
+    "publisher": "KARTHIKA S",
+    "version": "1.0.0",
+    "name": "Ordered Dropdown Extension",
+    "description": "Custom dropdown control for Azure DevOps that allows ordering items according to business needs",
+    "public": false,
+    "categories": ["Azure Boards"],
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],
+    "content": {
+        "details": {
+            "path": "overview.md"
+        }
+    },
+    "icons": {
+  "default": "images/icon.png"
+},
+    "contributions": [
+        {
+            "id": "ordered-dropdown-control",
+            "type": "ms.vss-work-web.work-item-form-control",
+            "targets": [
+                "ms.vss-work-web.work-item-form"
+            ],
+            "properties": {
+                "name": "Ordered Dropdown",
+                "uri": "ordered-dropdown.html",
+                "height": 90
+            }
+        }
+    ],
+    "files": [
+        {
+            "path": "ordered-dropdown.html",
+            "addressable": true
+        },
+        {
+            "path": "ordered-dropdown.js",
+            "addressable": true
+        },
+        {
+            "path": "ordered-dropdown.css",
+            "addressable": true
+        },
+        {
+            "path": "node_modules/azure-devops-extension-sdk/dist",
+            "addressable": true,
+            "packagePath": "lib"
+        },
+        {
+            "path": "node_modules/azure-devops-ui/dist",
+            "addressable": true,
+            "packagePath": "lib"
+        },
+        {
+            "path": "overview.md",
+            "addressable": true
+        }
+    ]
+}
