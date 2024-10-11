@@ -4,10 +4,42 @@
     <title>Ordered Dropdown</title>
     <script src="lib/VSS.SDK.min.js"></script>
     <link rel="stylesheet" href="ordered-dropdown.css" />
+    <style>
+        .ordered-dropdown-container {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
     <div class="ordered-dropdown-container">
-        <select id="orderedDropdown"></select>
+        <div class="input-group">
+            <label for="customOrderInput">Choose values for the control. Example: Zebra; Cat; Mouse; Dog</label>
+            <input type="text" id="customOrderInput" placeholder="Enter custom values" required />
+        </div>
+        <div class="input-group">
+            <label for="fieldSelector">Select the field for this control (must be a picklist string)</label>
+            <select id="fieldSelector" required>
+                <!-- Populate with fields dynamically -->
+            </select>
+        </div>
+        <div class="input-group">
+            <select id="orderedDropdown"></select>
+        </div>
     </div>
     <script src="ordered-dropdown.js"></script>
 </body>
