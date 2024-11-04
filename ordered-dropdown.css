@@ -1,4 +1,16 @@
 /* ordered-dropdown.css */
+.ordered-dropdown-container {
+  padding: 8px;
+}
+
+.dropdown-control {
+  width: 100%;
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+}
+
+
 .dropdown-container {
   padding: 8px;
   width: 100%;
