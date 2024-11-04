@@ -1,7 +1,22 @@
 /* ordered-dropdown.css */
-.ordered-dropdown {
-    display: block;
-    font-size: 14px;
-    margin: 10px;
-  }
-  
+.dropdown-container {
+  padding: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.custom-dropdown {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background-color: #fff;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.custom-dropdown:focus {
+  outline: none;
+  border-color: #0078d4;
+  box-shadow: 0 0 0 1px #0078d4;
+}

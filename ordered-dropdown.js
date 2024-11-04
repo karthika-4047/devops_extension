@@ -1,3 +1,4 @@
+// ordered-dropdown.js
 VSS.init({
     explicitNotifyLoaded: true,
     usePlatformStyles: true
@@ -11,22 +12,30 @@ VSS.require(["VSS/Service", "TFS/WorkItemTracking/Services", "TFS/WorkItemTracki
 
         var fieldName = "";
         var customOrder = [];
+        var allowedValues = [];
 
-        function loadCustomOrder() {
-            var customOrderInput = document.getElementById("customOrderInput");
-            if (customOrderInput) {
-                var customOrderValue = customOrderInput.value;
-                customOrder = customOrderValue.split(";").map(item => item.trim()).filter(item => item); // Ensure no empty items
-            }
+        function parseCustomOrder(orderString) {
+            if (!orderString) return [];
+            return orderString.split(',')
+                .map(item => item.trim())
+                .filter(item => item && allowedValues.includes(item));
         }
 
-        function updateDropdown(values) {
+        function updateDropdown() {
             var dropdown = document.getElementById("orderedDropdown");
+            if (!dropdown) return;
+            
             dropdown.innerHTML = ""; // Clear previous options
 
-            // Add custom ordered items first
+            // Add empty option if needed
+            var emptyOption = document.createElement("option");
+            emptyOption.text = "-- Select a value --";
+            emptyOption.value = "";
+            dropdown.add(emptyOption);
+
+            // Add items in custom order first
             customOrder.forEach(function(item) {
-                if (values.indexOf(item) !== -1) {
+                if (allowedValues.includes(item)) {
                     var option = document.createElement("option");
                     option.text = item;
                     option.value = item;
@@ -34,56 +43,68 @@ VSS.require(["VSS/Service", "TFS/WorkItemTracking/Services", "TFS/WorkItemTracki
                 }
             });
 
-            // Add remaining items that are not in custom order
-            values.forEach(function(item) {
-                if (customOrder.indexOf(item) === -1) {
+            // Add remaining allowed values that aren't in custom order
+            allowedValues.forEach(function(item) {
+                if (!customOrder.includes(item)) {
                     var option = document.createElement("option");
                     option.text = item;
                     option.value = item;
                     dropdown.add(option);
                 }
             });
-
-            // Optional: Show a message if no items are available
-            if (dropdown.options.length === 0) {
-                var option = document.createElement("option");
-                option.text = "No options available";
-                option.disabled = true;
-                dropdown.add(option);
-            }
         }
 
-        function load() {
-            return witService.getFieldValue(fieldName).then(function (value) {
-                loadCustomOrder();
-                return witClient.getWorkItemFields().then(function(fields) {
+        function load(params) {
+            if (!params || !params.inputs) return;
+
+            fieldName = params.inputs.FieldName;
+            var orderConfig = params.inputs.Values || "";
+            
+            return witService.getFieldValue(fieldName)
+                .then(function (value) {
+                    return witClient.getWorkItemFields();
+                })
+                .then(function(fields) {
                     var field = fields.find(f => f.name === fieldName);
                     if (field && field.allowedValues) {
-                        updateDropdown(field.allowedValues);
-                    } else {
-                        console.error("Field not found or has no allowed values.");
+                        allowedValues = field.allowedValues;
+                        customOrder = parseCustomOrder(orderConfig);
+                        updateDropdown();
+                        
+                        // Set initial value if it exists
+                        if (value) {
+                            var dropdown = document.getElementById("orderedDropdown");
+                            dropdown.value = value;
+                        }
                     }
+                })
+                .catch(function(error) {
+                    console.error("Error loading field configuration:", error);
                 });
-            }).catch(function(error) {
-                console.error("Error loading field value:", error);
-            }).then(function() {
-                if (value) {
-                    document.getElementById("orderedDropdown").value = value;
-                }
-            });
         }
 
         function save() {
-            var value = document.getElementById("orderedDropdown").value;
-            return witService.setFieldValue(fieldName, value).catch(function(error) {
-                console.error("Error saving field value:", error);
-            });
+            var dropdown = document.getElementById("orderedDropdown");
+            if (!dropdown) return;
+            
+            var value = dropdown.value;
+            return witService.setFieldValue(fieldName, value)
+                .catch(function(error) {
+                    console.error("Error saving field value:", error);
+                });
         }
 
         VSS.register("ordered-dropdown-control", {
             onLoaded: function (params) {
-                fieldName = params.inputs.FieldName; // Assuming you get this from the options
-                load();
+                load(params);
+            },
+            onFieldChanged: function(args) {
+                if (args.fieldName === fieldName) {
+                    var dropdown = document.getElementById("orderedDropdown");
+                    if (dropdown && args.value !== dropdown.value) {
+                        dropdown.value = args.value || "";
+                    }
+                }
             },
             onSave: save
         });

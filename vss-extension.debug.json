@@ -1,0 +1,38 @@
+{
+    "manifestVersion": 1,
+    "id": "dropdown-extension-debug",
+    "publisher": "KarthikaRS99",
+    "version": "0.0.1",
+    "name": "Your Extension Name (Debug)",
+    "description": "Debug version of your extension",
+    "public": false,
+    "baseUri": "https://localhost:8080",
+    "contributions": [
+        {
+            "id": "your-contribution-id",
+            "type": "ms.vss-web.hub",
+            "targets": [
+                "ms.vss-work-web.work-hub-group"
+            ],
+            "properties": {
+                "name": "Your Extension",
+                "uri": "your-main-html-file.html"
+            }
+        }
+    ],
+    "files": [
+        {
+            "path": "your-main-html-file.html",
+            "addressable": true
+        },
+        {
+            "path": "your-main-js-file.js",
+            "addressable": true
+        },
+        {
+            "path": "node_modules/azure-devops-extension-sdk/dist/SDK.min.js",
+            "addressable": true,
+            "packagePath": "lib/SDK.min.js"
+        }
+    ]
+}
